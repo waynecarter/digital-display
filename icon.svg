@@ -1,0 +1,6 @@
+<svg width="1024" height="528" xmlns="http://www.w3.org/2000/svg">
+    <g>
+        <path d="M0 264 L248 16 L496 264 L248 512 Z" fill="white"/>
+        <path d="M264 0 L760 0 L1024 264 L760 528 L264 528 L528 264 Z" fill="white"/>
+    </g>
+</svg>

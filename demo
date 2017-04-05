@@ -1,0 +1,240 @@
+#!/bin/bash
+
+url='http://admin:admin@localhost:4984/gate-display'
+
+#######################
+# Display flight info #
+#######################
+
+read -p "Press [Enter] to display flight info..."
+
+body='
+{
+    "type" : "gate",
+    "airport" : "SFO",
+    "gate" : "A17",
+    "flight" : {
+        "number" : "AA1023",
+        "destination" : "Minneapolis-Saint Paul",
+        "departureTime" : "9:30 AM"
+    }
+}'
+
+response=$(curl -s -X PUT -H "Content-Type: application/json" -d "$body" "$url/airport.sfo.gate.a17")
+rev=$(echo $response | grep -o '"rev":".*"' | cut -d '"' -f 4)
+
+########################
+# Display upgrade list #
+########################
+
+read -p "Press [Enter] to display upgrade list..."
+
+body='
+{
+    "_rev" : "%s",
+    "type" : "gate",
+    "airport" : "SFO",
+    "gate" : "A17",
+    "flight" : {
+        "number" : "AA1023",
+        "destination" : "Minneapolis-Saint Paul",
+        "departureTime" : "9:30 AM",
+        "upgrades" : [
+            {
+                "name" : "Car / W"
+            },
+            {
+                "name" : "LeC / A"
+            },
+            {
+                "name" : "Sur / P"
+            },
+            {
+                "name" : "Fra / A"
+            }
+        ],
+        "seatsRemaining" : 3
+    }
+}'
+printf -v body "$body" "$rev"
+
+response=$(curl -s -X PUT -H "Content-Type: application/json" -d "$body" "$url/airport.sfo.gate.a17")
+rev=$(echo $response | grep -o '"rev":".*"' | cut -d '"' -f 4)
+
+##########################
+# Update seats remaining #
+##########################
+
+read -p "Press [Enter] to update seats remaining..."
+
+body='
+{
+    "_rev" : "%s",
+    "type" : "gate",
+    "airport" : "SFO",
+    "gate" : "A17",
+    "flight" : {
+        "number" : "AA1023",
+        "destination" : "Minneapolis-Saint Paul",
+        "departureTime" : "9:30 AM",
+        "upgrades" : [
+            {
+                "name" : "Car / W"
+            },
+            {
+                "name" : "LeC / A"
+            },
+            {
+                "name" : "Sur / P"
+            },
+            {
+                "name" : "Fra / A"
+            }
+        ],
+        "seatsRemaining" : 2
+    }
+}'
+printf -v body "$body" "$rev"
+
+response=$(curl -s -X PUT -H "Content-Type: application/json" -d "$body" "$url/airport.sfo.gate.a17")
+rev=$(echo $response | grep -o '"rev":".*"' | cut -d '"' -f 4)
+
+########################
+# Update upgrades list #
+########################
+
+read -p "Press [Enter] to update upgrades list..."
+
+body='
+{
+    "_rev" : "%s",
+    "type" : "gate",
+    "airport" : "SFO",
+    "gate" : "A17",
+    "flight" : {
+        "number" : "AA1023",
+        "destination" : "Minneapolis-Saint Paul",
+        "departureTime" : "9:30 AM",
+        "upgrades" : [
+            {
+                "name" : "Car / W",
+                "upgraded" : true
+            },
+            {
+                "name" : "LeC / A",
+                "upgraded" : true
+            },
+            {
+                "name" : "Sur / P"
+            },
+            {
+                "name" : "Fra / A"
+            }
+        ],
+        "seatsRemaining" : 0
+    }
+}'
+printf -v body "$body" "$rev"
+
+response=$(curl -s -X PUT -H "Content-Type: application/json" -d "$body" "$url/airport.sfo.gate.a17")
+rev=$(echo $response | grep -o '"rev":".*"' | cut -d '"' -f 4)
+
+##################
+# Start boarding #
+##################
+
+read -p "Press [Enter] to start boarding..."
+
+body='
+{
+    "_rev" : "%s",
+    "type" : "gate",
+    "airport" : "SFO",
+    "gate" : "A17",
+    "flight" : {
+        "number" : "AA1023",
+        "destination" : "Minneapolis-Saint Paul",
+        "departureTime" : "9:30 AM",
+        "upgrades" : [
+            {
+                "name" : "Car / W",
+                "upgraded" : true
+            },
+            {
+                "name" : "LeC / A",
+                "upgraded" : true
+            },
+            {
+                "name" : "Sur / P"
+            },
+            {
+                "name" : "Fra / A"
+            }
+        ],
+        "seatsRemaining" : 0,
+        "boarding" : "Group 1"
+    }
+}'
+printf -v body "$body" "$rev"
+
+response=$(curl -s -X PUT -H "Content-Type: application/json" -d "$body" "$url/airport.sfo.gate.a17")
+rev=$(echo $response | grep -o '"rev":".*"' | cut -d '"' -f 4)
+
+##################
+# Close boarding #
+##################
+
+read -p "Press [Enter] to close boarding..."
+
+body='
+{
+    "_rev" : "%s",
+    "type" : "gate",
+    "airport" : "SFO",
+    "gate" : "A17",
+    "flight" : {
+        "number" : "AA1023",
+        "destination" : "Minneapolis-Saint Paul",
+        "departureTime" : "9:30 AM",
+        "upgrades" : [
+            {
+                "name" : "Car / W",
+                "upgraded" : true
+            },
+            {
+                "name" : "LeC / A",
+                "upgraded" : true
+            },
+            {
+                "name" : "Sur / P"
+            },
+            {
+                "name" : "Fra / A"
+            }
+        ],
+        "seatsRemaining" : 0,
+        "boarding" : "Closed"
+    }
+}'
+printf -v body "$body" "$rev"
+
+response=$(curl -s -X PUT -H "Content-Type: application/json" -d "$body" "$url/airport.sfo.gate.a17")
+rev=$(echo $response | grep -o '"rev":".*"' | cut -d '"' -f 4)
+
+##########################
+# Put display in standby #
+##########################
+
+read -p "Press [Enter] to put display in standby..."
+
+body='
+{
+    "_rev" : "%s",
+    "type" : "gate",
+    "airport" : "SFO",
+    "gate" : "A17"
+}'
+printf -v body "$body" "$rev"
+
+response=$(curl -s -X PUT -H "Content-Type: application/json" -d "$body" "$url/airport.sfo.gate.a17")
+rev=$(echo $response | grep -o '"rev":".*"' | cut -d '"' -f 4)

@@ -1,0 +1,156 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="styles.css"></link>
+
+    <script type="text/javascript" src="config.js"></script>
+    <script type="text/javascript" src="couchbase-document-change-listener.js"></script>
+    
+    <script type="text/javascript">
+        var documentChangeListener = null;
+        
+        function start()
+        {
+            stop();
+
+            documentChangeListener = new CouchbaseDocumentChangeListener(config.url, config.getChannels());
+
+            documentChangeListener.onStop = function()
+            {
+                document.getElementById("splash").style.display = "block";
+            }
+
+            documentChangeListener.addListener(function(doc)
+            {
+                document.getElementById("gate").innerHTML = (doc.gate ? doc.gate : "");
+                document.getElementById("flightNumber").innerHTML = (doc.flight && doc.flight.number ? doc.flight.number : "");
+                document.getElementById("destination").innerHTML = (doc.flight && doc.flight.destination ? doc.flight.destination : "");
+                document.getElementById("seatsRemaining").innerHTML = (doc.flight && doc.flight.seatsRemaining > 0 ? doc.flight.seatsRemaining : 0);
+
+                if (doc.flight && doc.flight.boarding) {
+                    document.getElementById("departureStatus").innerHTML = "Boarding " + doc.flight.boarding;
+                } else {
+                    document.getElementById("departureStatus").innerHTML = (doc.flight && doc.flight.departureTime ? "Departs " + doc.flight.departureTime : "");
+                }
+
+                for (var i=0; i<10; i++) {
+                    var element = document.getElementById("upgradesEntry" + (i + 1));
+
+                    if (doc.flight && doc.flight.upgrades && doc.flight.upgrades.length > i) {
+                        var upgrade = doc.flight.upgrades[i];
+
+                        element.innerHTML =
+                            "<table class='upgrades-entry-details" + (upgrade.upgraded ? " upgraded" : "") + "'>" +
+                                "<tr>" +
+                                    "<td class='index'>" + (upgrade.upgraded ? "Upgraded" : i + 1) + "</td>" +
+                                    "<td class='name'>" + upgrade.name + "</td>" +
+                                "</tr>" +
+                            "</table>";
+                    } else {
+                        element.innerHTML = null;
+                    }
+                }
+
+                // Show/hide splash depending on whether or not we have anything to display.
+                if (doc.flight) {
+                    document.getElementById("content").style.display = "block";
+                    document.getElementById("splash").style.display = "none";
+                } else {
+                    document.getElementById("splash").style.display = "block";
+                    document.getElementById("content").style.display = "none";
+                }
+
+                // Show/hide departure time depending on whether or not we have anything to display.
+                if (doc.flight && (doc.flight.departureTime || doc.flight.boarding)) {
+                    document.getElementById("departureStatus").style.display = "block";
+                } else {
+                    document.getElementById("departureStatus").style.display = "none";
+                }
+
+                // Show/hide upgrades depending on whether or not we have anything to display.
+                if (doc.flight && (doc.flight.seatsRemaining || (doc.flight.upgrades && doc.flight.upgrades.length > 0))) {
+                    document.getElementById("upgrades").style.display = "block";
+                } else {
+                    document.getElementById("upgrades").style.display = "none";
+                }
+            }, function(doc)
+            {
+                return (doc.type == "gate" || doc._invalidated);
+            });
+
+            documentChangeListener.start();
+        }
+
+        function stop()
+        {
+            if (documentChangeListener) {
+                documentChangeListener.stop();
+                documentChangeListener = null;
+            }
+        }
+
+        function scale()
+        {
+            document.getElementById("content").style.transform = "scale(" + (document.body.clientWidth / 800) + ")";
+        }
+    </script>
+</head>
+<body onload="scale(); start();" onunload="stop()" onresize="scale()">
+    <div id="splash"></div>
+    
+    <div id="content">
+        <!-- Title -->
+        <div class="title">Atlas Air</div>
+
+        <!-- Flight Info -->
+        <table class="flight-info">
+            <tr>
+                <td id="gate"></td>
+                <td>
+                    <div id="flightNumber"></div>
+                    <div id="destination"></div>
+                </td>
+                <td id="departureStatus"></td>
+            </tr>
+        </table>
+
+        <!-- Upgrade List -->
+        <div id="upgrades">
+            <table class="upgrades-header">
+                <tr>
+                    <td class="upgrades-title">
+                        <div>Upgrade List</div>
+                    </td>
+                    <td>
+                        <div id="seatsRemaining">0</div>
+                    </td>
+                    <td class="seats-remaining-title">
+                        <div>Seats Remaining</div>
+                    </td>
+                </tr>
+            </table>
+            <table class="upgrade-entries">
+                <tr>
+                    <td class="upgrades-entry" id="upgradesEntry1"></td>
+                    <td class="upgrades-entry" id="upgradesEntry6"></td>
+                </tr>
+                <tr>
+                    <td class="upgrades-entry" id="upgradesEntry2"></td>
+                    <td class="upgrades-entry" id="upgradesEntry7"></td>
+                </tr>
+                <tr>
+                    <td class="upgrades-entry" id="upgradesEntry3"></td>
+                    <td class="upgrades-entry" id="upgradesEntry8"></td>
+                </tr>
+                <tr>
+                    <td class="upgrades-entry" id="upgradesEntry4"></td>
+                    <td class="upgrades-entry" id="upgradesEntry9"></td>
+                </tr>
+                <tr>
+                    <td class="upgrades-entry" id="upgradesEntry5"></td>
+                    <td class="upgrades-entry" id="upgradesEntry10"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,149 @@
+body {
+    font-family: arial;
+    margin: 0;
+    background-color: #103071;
+}
+
+table {
+    border-spacing: 0;
+}
+
+td {
+    padding: 0;
+}
+
+#splash {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #103071;
+    background-image: url(icon.svg);
+    background-size: 25% auto;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+#content {
+    display: none;
+    width: 800px;
+    transform-origin: top left;
+}
+
+.title {
+    background-color: black;
+    padding: 4pt 0 2pt 36pt;
+    font-size: 12pt;
+    color: white;
+    background-image: url(icon.svg);
+    background-size: auto 9pt;
+    background-position: 14pt center;
+    background-repeat: no-repeat;
+}
+
+.flight-info {
+    width: 100%;
+    height: 60pt;
+    background-color: #007706;
+    color: white;
+}
+
+.flight-info td:nth-child(2) {
+    width: 100%;
+}
+
+#gate {
+    background-color: #008d07;
+    padding: 0 14pt;
+    min-width: 40pt;
+    font-size: 36pt;
+}
+
+#flightNumber {
+    padding: 0 14pt;
+    font-size: 18pt;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+#destination {
+    padding: 0 14pt;
+    font-size: 18pt;
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+#departureStatus {
+    background-color: #008d07;
+    padding: 0 14pt;
+    min-width: 100pt;
+    font-size: 18pt;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+#upgrades {
+    padding: 14pt;
+}
+
+.upgrades-header {
+    width: 100%;
+    color: white;
+}
+
+.upgrades-title {
+    width: 100%;
+    font-size: 28pt;
+}
+
+#seatsRemaining {
+    font-size: 28pt;
+}
+
+.seats-remaining-title {
+    font-size: 10pt;
+    padding-left: 8pt;
+}
+
+.upgrade-entries {
+    width: 100%;
+    border-spacing: 3pt;
+    margin-top: 14pt;
+}
+
+.upgrades-entry {
+    width: 50%;
+    height: 30pt;
+    background-color: #0f285f;
+}
+
+.upgrades-entry-details {
+    width: 100%;
+    height: 30pt;
+    font-size: 12pt;
+}
+
+.upgrades-entry-details .index {
+    width: 64pt;
+    background-color: #959598;
+    color: white;
+    text-align: center;
+}
+
+.upgrades-entry-details .name {
+    width: calc(100% - 64pt);
+    background-color: #dddcdf;
+    padding-left: 14pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.upgrades-entry-details.upgraded .index {
+    background-color: #0059c8;
+}
+
+.upgrades-entry-details.upgraded .name {
+    background-color: #0072ff;
+    color: white;
+}

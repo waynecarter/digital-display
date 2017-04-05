@@ -1,0 +1,28 @@
+{
+    "interface": ":4984",
+    "log": ["*"],
+    "CORS": {
+        "origin": ["*"],
+        "headers": ["Content-Type"],
+        "maxAge": 1728000
+    },
+    "databases": {
+        "gate-display": {
+            "server": "walrus:",
+            "users": {
+                "admin": {"password": "admin", "admin_roles": ["admin"], "admin_channels": ["*"]},
+                "GUEST": {"admin_channels": ["*"]}
+            },
+            "sync": `
+                function (doc, oldDoc) {
+                    // Only admins can mutate docs.
+                    requireRole("admin");
+
+                    if (doc.type == "gate") {
+                        channel("airport." + doc.airport.toLowerCase() + ".gate." + doc.gate.toLowerCase());
+                    }
+                };
+            `
+        }
+    }
+}
