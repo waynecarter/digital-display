@@ -2,7 +2,7 @@
 
 ## Run Instructions:
 
-1. Download Sync Gateway from http://www.couchbase.com/nosql-databases/downloads
+1. Download Sync Gateway from <a href="http://www.couchbase.com/nosql-databases/downloads" target="_blank">http://www.couchbase.com/nosql-databases/downloads</a>
 2. Copy the sync_gateway executable from the download package to this directory
 3. Open default.html from this directory
 4. Start Sync Gateway
